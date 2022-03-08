@@ -24,6 +24,8 @@ async function convert(file, url_href){
     try{
         console.log(file, url_href)
         // img_file = await faceapi.fetchImage(url_href)
+        await faceapi.nets.ssdMobilenetv1.loadFromDisk('./public/models')
+
         const img_file = await canvas.loadImage(file)
         const face = await faceapi.detectSingleFace(img_file)
     

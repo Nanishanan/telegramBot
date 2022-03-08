@@ -1,7 +1,8 @@
 const axios = require('axios');
 const {Telegraf} = require('telegraf');
 const fs = require('fs')
-const bot = new Telegraf('5298752852:AAG_r3UJebeYSOO1FmhjHaju6usd5wfUzbQ');
+const {BOT_TOKEN} = require('./config')
+const bot = new Telegraf(BOT_TOKEN);
 const convertion_function = require('./controller/convert')
 
 bot.command('start', (ctx) => {
