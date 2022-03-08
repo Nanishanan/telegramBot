@@ -4,6 +4,7 @@ const fs = require('fs')
 const {BOT_TOKEN} = require('./config')
 const bot = new Telegraf(BOT_TOKEN);
 const convertion_function = require('./controller/convert')
+const { spawnSync } = require('child_process')
 
 bot.command('start', (ctx) => {
     console.log(ctx.from)
@@ -26,7 +27,7 @@ bot.on('message', async (ctx)=>{
                             .on('finish', ()=>{
                                 bot.telegram.sendMessage(ctx.chat.id, `Converting...`)
                                 console.log('Uploaded')
-                                convert(ctx.from.id, url_href)
+                                convert(ctx, ctx.from.id, url_href)
                             })
                             .on('error', (e)=>{
                                 console.log("Error occured", e)
@@ -36,8 +37,13 @@ bot.on('message', async (ctx)=>{
         })
 })
 
-function convert(file, url_href){
-    convertion_function(file, url_href)
+async function convert(ctx, file, url_href){
+
+    spawnSync('python', ['app.py', file])
+
+    ctx.replyWithPhoto({source: __dirname+'/public/out/'+file+'.jpg'})
+    // img = fs.read(__dirname+'/public/images/'+file+'.jpg')
+
 }
 
 bot.launch();
